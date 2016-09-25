@@ -1,0 +1,67 @@
+package com.labs;
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+/**
+ * Created by ameks on 24.09.2016.
+ */
+public class MyLinkedListTest extends Assert {
+    private ListTestHelper testHelper = new ListTestHelper();
+
+    @Before
+    public void initializeArray() {
+        testHelper.initializeList(CollectionFactory.MyListType.LINKED_LIST);
+    }
+
+    @Test
+    public void testArraySize() {
+        testHelper.testArraySize();
+    }
+
+    @Test
+    public void testArrayIndexOf() {
+        testHelper.testArrayIndexOf();
+    }
+
+    @Test
+    public void testArrayAddEll() {
+        testHelper.testArrayAddEll();
+    }
+
+    @Test
+    public void testArrayAddEllInd() {
+        testHelper.testArrayAddEllInd();
+    }
+
+    @Test
+    public void testArrayAddAllEll() {
+        testHelper.testArrayAddAllEll();
+    }
+
+    @Test
+    public void testArrayAddAllEllInd() {
+        testHelper.testArrayAddAllEllInd();
+    }
+
+    @Test
+    public void testRemove() {
+        testHelper.testRemove();
+    }
+
+    @Test
+    public void testToArray() {
+        testHelper.testToArray();
+    }
+
+    @Test
+    public void testSet() {
+        testHelper.testSet();
+    }
+
+    @Test
+    public void testGet() {
+        testHelper.testGet();
+    }
+}
