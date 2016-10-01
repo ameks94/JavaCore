@@ -5,7 +5,7 @@ import com.labs.types.SkiPassType;
 import java.time.LocalDate;
 import java.util.UUID;
 
-public abstract class SkiPass {
+public class SkiPass {
     protected UUID id;
     protected SkiPassType type;
     protected LocalDate expireDate;

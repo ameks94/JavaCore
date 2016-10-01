@@ -3,7 +3,7 @@ package com.labs.types;
 /**
  * Created by ameks on 30.09.2016.
  */
-public enum TripCountType {
+public enum TripsCountType {
     TEN(10),
     TWENTY(20),
     FIFTY(50),
@@ -11,7 +11,7 @@ public enum TripCountType {
 
     private final int value;
 
-    TripCountType(final int newValue) {
+    TripsCountType(final int newValue) {
         value = newValue;
     }
 

@@ -7,6 +7,10 @@ import com.labs.SkiPassUsageLimitator;
  */
 public class TimeRangeLimitator implements SkiPassUsageLimitator {
 
+
+
+
+
     @Override
     public void useSkiPass() {
 
