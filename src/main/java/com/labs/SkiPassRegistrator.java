@@ -2,28 +2,34 @@ package com.labs;
 
 import com.labs.types.SkiPassType;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.function.BooleanSupplier;
 
-/**
- * Created by ameks on 29.09.2016.
- */
 public class SkiPassRegistrator {
-    List<SkiPass> blockedCards = new ArrayList();
 
-    public SkiPass createNewSkiPass(SkiPassType type) {
-        return SkiPassFactory.createSkiPass(type);
+    Map<SkiPass, Boolean> cardsAndBlockedStatuses = new HashMap<>();
+
+    public void registerSkiPass(SkiPass skiPass) {
+        cardsAndBlockedStatuses.put(skiPass, false);
     }
 
     public void blockSkiPass(SkiPass skiPass) {
-        blockedCards.add(skiPass);
+        if (cardsAndBlockedStatuses.containsKey(skiPass)) {
+            cardsAndBlockedStatuses.put(skiPass, true);
+        } else {
+            throw new RuntimeException("Can't block nonexistent skipass.");
+        }
     }
 
     public void unblockSkiPass(SkiPass skiPass) {
-        blockedCards.remove(skiPass);
+        if (cardsAndBlockedStatuses.containsKey(skiPass)) {
+            cardsAndBlockedStatuses.put(skiPass, false);
+        } else {
+            throw new RuntimeException("Can't unblock nonexistent skipass.");
+        }
     }
 
     public boolean isSkiPassBlocked(SkiPass skiPass) {
-        return blockedCards.contains(skiPass);
+        return cardsAndBlockedStatuses.get(skiPass);
     }
 }

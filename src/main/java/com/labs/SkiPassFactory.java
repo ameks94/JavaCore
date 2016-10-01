@@ -1,5 +1,6 @@
 package com.labs;
 
+import com.labs.skipass.HolidaySkiPass;
 import com.labs.skipass.HolidaysSkiPass;
 import com.labs.skipass.SeasonSkiPass;
 import com.labs.types.SkiPassType;
@@ -11,11 +12,11 @@ import com.labs.skipass.WorkDaySkiPass;
 public class SkiPassFactory {
     public static SkiPass createSkiPass(SkiPassType type) {
         switch (type) {
-            case HOLIDAYS:
-                return new HolidaysSkiPass();
-            case SEASONS:
+            case HOLIDAY:
+                return new HolidaySkiPass();
+            case SEASON:
                 return new SeasonSkiPass();
-            case WORK_DAYS:
+            case WORK_DAY:
                 return new WorkDaySkiPass();
             default:
                 return null;

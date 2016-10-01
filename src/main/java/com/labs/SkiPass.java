@@ -3,25 +3,34 @@ package com.labs;
 import com.labs.types.SkiPassType;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 public abstract class SkiPass {
-    protected String id;
+    protected UUID id;
     protected SkiPassType type;
     protected LocalDate expireDate;
+    protected SkiPassUsageLimitator limitator;
 
-    public abstract boolean isTripExists();
-
-    public abstract void useCard();
-
-    public boolean isDateExpired() {
-        return  LocalDate.now().isAfter(getExpireDate());
+    public SkiPass(SkiPassType type, LocalDate expireDate, SkiPassUsageLimitator limitator) {
+        this.type = type;
+        this.expireDate = expireDate;
+        this.limitator = limitator;
+        this.id = UUID.randomUUID();
     }
 
-    public String getId() {
+    public boolean isTripAllowed() {
+        return !isDateExpired() && limitator.isTripAvailable();
+    }
+
+    public void useCard() {
+        limitator.useSkiPass();
+    }
+
+    public UUID getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -39,6 +48,10 @@ public abstract class SkiPass {
 
     public void setExpireDate(LocalDate expireDate) {
         this.expireDate = expireDate;
+    }
+
+    protected boolean isDateExpired() {
+        return  LocalDate.now().isAfter(expireDate);
     }
 
     @Override

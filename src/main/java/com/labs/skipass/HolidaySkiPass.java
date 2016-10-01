@@ -9,9 +9,9 @@ import java.time.LocalDate;
 /**
  * Created by ameks on 30.09.2016.
  */
-public class WorkDaySkiPass extends SkiPass {
+public class HolidaySkiPass extends SkiPass {
 
-    public WorkDaySkiPass(LocalDate expireDate, SkiPassUsageLimitator limitator) {
-        super(SkiPassType.WORK_DAY, expireDate, limitator);
+    public HolidaySkiPass(LocalDate expireDate, SkiPassUsageLimitator limitator) {
+        super(SkiPassType.HOLIDAY, expireDate, limitator);
     }
 }

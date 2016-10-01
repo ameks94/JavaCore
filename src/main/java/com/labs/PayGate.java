@@ -1,10 +1,11 @@
 package com.labs;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
-/**
- * Created by ameks on 26.09.2016.
- */
 public class PayGate {
 
     private SkiPassRegistrator registrator;
@@ -19,12 +20,18 @@ public class PayGate {
         }
         skiPass.useCard();
         return true;
+
     }
 
     private boolean isSkiPassBad(SkiPass skiPass) {
         return skiPass == null ||
-                skiPass.isDateExpired() ||
                 registrator.isSkiPassBlocked(skiPass) ||
-                !skiPass.isTripExists();
+                !skiPass.isTripAllowed();
+
+    }
+
+    public List<SkiPass> getRegisteredSkiPasses() {
+//        return registrator.
+        return Collections.emptyList();
     }
 }
