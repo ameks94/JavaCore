@@ -6,5 +6,5 @@ package com.labs.types;
 public enum SkiPassType {
     HOLIDAY,
     WORK_DAY,
-    SEASON
+    SEASON;
 }

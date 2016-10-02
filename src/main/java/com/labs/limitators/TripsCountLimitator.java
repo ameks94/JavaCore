@@ -3,22 +3,32 @@ package com.labs.limitators;
 import com.labs.SkiPassUsageLimitator;
 import com.labs.types.TripsCountType;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 /**
  * Created by ameks on 01.10.2016.
  */
 public class TripsCountLimitator implements SkiPassUsageLimitator {
 
-    TripsCountType tripsCountType;
+    private TripsCountType tripsCountType;
+    private int tripsWasUsed = 0;
 
-
+    public TripsCountLimitator(TripsCountType tripsCountType) {
+        this.tripsCountType = tripsCountType;
+    }
 
     @Override
     public void useSkiPass() {
-
+        if (!isTripAvailable())
+            throw new RuntimeException("Trip is not allowed.");
+        tripsWasUsed++;
     }
 
     @Override
     public boolean isTripAvailable() {
-        return false;
+        if ( tripsCountType.getValue() == tripsWasUsed )
+            return false;
+        return true;
     }
 }

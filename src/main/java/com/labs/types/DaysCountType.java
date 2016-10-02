@@ -23,6 +23,10 @@ public enum DaysCountType {
         this.endTime = endTime;
     }
 
+    public boolean isAllowedTime(LocalTime time) {
+        return time.isAfter(startTime) && time.isBefore(endTime);
+    }
+
     private static LocalTime parseTime(String time) {
         return LocalTime.parse(time);
     }
