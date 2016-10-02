@@ -20,8 +20,6 @@ public class TripsCountLimitator implements SkiPassUsageLimitator {
 
     @Override
     public void useSkiPass() {
-        if (!isTripAvailable())
-            throw new RuntimeException("Trip is not allowed.");
         tripsWasUsed++;
     }
 

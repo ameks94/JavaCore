@@ -7,6 +7,8 @@ import com.labs.SkiPassUsageLimitator;
  */
 public class SeasonRangeLimitator implements SkiPassUsageLimitator {
 
+
+
     public SeasonRangeLimitator() {
     }
 

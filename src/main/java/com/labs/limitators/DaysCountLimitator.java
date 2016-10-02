@@ -16,7 +16,6 @@ public class DaysCountLimitator implements SkiPassUsageLimitator {
 
     private DaysCountType daysCountType;
     private List<LocalDate> usedDays = new ArrayList<>();
-    private int skiPassWasUsed = 0;
 
     public DaysCountLimitator(DaysCountType daysCountType) {
         this.daysCountType = daysCountType;
@@ -24,14 +23,10 @@ public class DaysCountLimitator implements SkiPassUsageLimitator {
 
     @Override
     public void useSkiPass() {
-        if (!isTripAvailable())
-            throw new RuntimeException("Trip is not allowed.");
-
         LocalDate now = LocalDate.now();
         if (usedDays.contains(now)) {
             usedDays.add(now);
         }
-        skiPassWasUsed++;
     }
 
     @Override

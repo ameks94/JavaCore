@@ -15,18 +15,16 @@ public class PayGate {
     }
 
     public boolean checkAndUseCard(SkiPass skiPass) {
-        if (isSkiPassBad(skiPass)) {
+        if (isSkiPassUnavailable(skiPass)) {
             return false;
         }
-        skiPass.useCard();
-        return true;
+        return skiPass.useCardIfAllowed();
 
     }
 
-    private boolean isSkiPassBad(SkiPass skiPass) {
+    private boolean isSkiPassUnavailable(SkiPass skiPass) {
         return skiPass == null ||
-                registrator.isSkiPassBlocked(skiPass) ||
-                !skiPass.isTripAllowed();
+                registrator.isSkiPassBlocked(skiPass);
 
     }
 
