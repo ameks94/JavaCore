@@ -4,6 +4,7 @@ import com.labs.types.SkiPassType;
 
 import java.util.*;
 import java.util.function.BooleanSupplier;
+import java.util.stream.Collectors;
 
 public class SkiPassRegistrator {
 
@@ -31,5 +32,18 @@ public class SkiPassRegistrator {
 
     public boolean isSkiPassBlocked(SkiPass skiPass) {
         return cardsAndBlockedStatuses.get(skiPass);
+    }
+
+    public Set<SkiPass> getRegisteredSkiPasses() {
+        return cardsAndBlockedStatuses.keySet();
+    }
+
+    public Set<SkiPass> getBlockedSkiPasses() {
+        return cardsAndBlockedStatuses
+                .entrySet()
+                .stream()
+                .filter(map -> map.getValue())
+                .map(map -> map.getKey())
+                .collect(Collectors.toSet());
     }
 }

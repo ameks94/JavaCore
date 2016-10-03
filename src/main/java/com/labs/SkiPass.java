@@ -11,10 +11,10 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 public class SkiPass {
-    protected UUID id;
-    protected SkiPassType type;
-    protected LocalDate expireDate;
-    protected SkiPassUsageLimitator limitator;
+    private UUID id;
+    private SkiPassType type;
+    private LocalDate expireDate;
+    private SkiPassUsageLimitator limitator;
 
     private SkiPass(SkiPassType type, LocalDate expireDate, SkiPassUsageLimitator limitator) {
         this.type = type;
