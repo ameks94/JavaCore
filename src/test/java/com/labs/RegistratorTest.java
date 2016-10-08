@@ -2,6 +2,7 @@ package com.labs;
 
 import junit.framework.Assert;
 import org.junit.*;
+import org.junit.Test;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -13,6 +14,8 @@ import java.util.List;
 public class RegistratorTest extends Assert {
     private static final SkiPassRegistrator registrator = new SkiPassRegistrator();
     private static final List<SkiPass> skiPasses = new ArrayList<>();
+    private static SkiPass existingSkiPass;
+    private static SkiPass unexistingSkiPass;
     public static final LocalDate now = LocalDate.now();
 
     @BeforeClass
@@ -23,30 +26,32 @@ public class RegistratorTest extends Assert {
             skiPasses.add(skiPass);
             registrator.registerSkiPass(skiPass);
         }
+        existingSkiPass = skiPasses.get(0);
+
+        unexistingSkiPass = SkiPass.createSeasonSkiPass(now);;
+    }
+
+    @Test
+    public void testRegistratorBlocking() {
+        registrator.blockSkiPass(existingSkiPass);
+        assertTrue(registrator.isSkiPassBlocked(existingSkiPass));
+
+        registrator.unblockSkiPass(existingSkiPass);
+        assertFalse(registrator.isSkiPassBlocked(existingSkiPass));
+
+
     }
 
     @org.junit.Test
-    public void testRegistrator() {
-        assertEquals(registrator.getRegisteredSkiPasses().size(), skiPasses.size());
-        assertEquals(registrator.getBlockedSkiPasses().size(), 0);
+    public void testRegistratorUnblockException() {
 
-        SkiPass forTest = skiPasses.get(0);
-        registrator.blockSkiPass(forTest);
-        assertTrue(registrator.isSkiPassBlocked(forTest));
-
-        registrator.unblockSkiPass(forTest);
-        assertFalse(registrator.isSkiPassBlocked(forTest));
-    }
-
-    @org.junit.Test
-    public void testExceptionRegistrator() {
-        SkiPass unexistingSkiPass = SkiPass.createSeasonSkiPass(now);
         try {
             registrator.blockSkiPass(unexistingSkiPass);
             assertTrue(false);
         } catch (RuntimeException ex) {
             assertTrue(true);
         }
+
         try {
             registrator.unblockSkiPass(unexistingSkiPass);
             assertTrue(false);
@@ -54,4 +59,12 @@ public class RegistratorTest extends Assert {
             assertTrue(true);
         }
     }
+
+    @org.junit.Test
+    public void testRegistrator() {
+        assertEquals(registrator.getRegisteredSkiPasses().size(), skiPasses.size());
+        assertEquals(registrator.getBlockedSkiPasses().size(), 0);
+    }
+
+
 }

@@ -1,10 +1,14 @@
 package com.labs;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
-/**
- * Created by ameks on 25.09.2016.
- */
+import java.time.LocalTime;
+
 public class Test extends Assert {
+    @org.junit.Test
+    public void test() {
+        LocalTime time = LocalTime.parse("09:00");
+        System.out.println(time);
+    }
 
 }

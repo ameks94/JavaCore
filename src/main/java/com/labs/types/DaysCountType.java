@@ -7,11 +7,11 @@ import java.time.LocalTime;
  */
 public enum DaysCountType {
 
-    HALF_DAY_FIRST(1, parseTime("9:00"), parseTime("13:00")),
+    HALF_DAY_FIRST(1, parseTime("09:00"), parseTime("13:00")),
     HALF_DAY_SECOND(1, parseTime("13:00"), parseTime("17:00")),
-    ONE_DAY(1, parseTime("9:00"), parseTime("17:00")),
-    TWO_DAYS(2, parseTime("9:00"), parseTime("17:00")),
-    FIVE_DAYS(3, parseTime("9:00"), parseTime("17:00"));
+    ONE_DAY(1, parseTime("09:00"), parseTime("17:00")),
+    TWO_DAYS(2, parseTime("09:00"), parseTime("17:00")),
+    FIVE_DAYS(3, parseTime("09:00"), parseTime("17:00"));
 
     private int daysCount;
     private LocalTime startTime;
