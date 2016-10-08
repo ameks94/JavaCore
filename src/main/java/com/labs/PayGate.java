@@ -5,6 +5,7 @@ import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 public class PayGate {
 
@@ -28,8 +29,7 @@ public class PayGate {
 
     }
 
-    public List<SkiPass> getRegisteredSkiPasses() {
-//        return registrator.
-        return Collections.emptyList();
+    public Set<SkiPass> getRegisteredSkiPasses() {
+        return registrator.getRegisteredSkiPasses();
     }
 }

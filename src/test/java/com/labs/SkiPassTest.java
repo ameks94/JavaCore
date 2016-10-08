@@ -35,7 +35,7 @@ public class SkiPassTest extends Assert {
     }
     
     
-    @org.junit.Test
+    @Test
     public void testSeasonSkiPass() {
         SkiPass seasonSkiPass = SkiPass.createSeasonSkiPass(expiredDateTuesday);
         assertNotNull(seasonSkiPass);
@@ -48,9 +48,40 @@ public class SkiPassTest extends Assert {
         assertFalse(seasonSkiPass.isTripAllowed());
     }
 
-    @org.junit.Test
+    @Test
     public void testHolidaySkiPassTrips() {
-        SkiPass holidaySkiPassTenTripsCount = SkiPass.createSkiPass(SkiPassType.HOLIDAY, expiredDateTuesday, TripsCountType.TEN);
+        testSkiPassTrips(SkiPassType.HOLIDAY);
+    }
+
+    @Test
+    public void testHolidaySkiPassDays() {
+        testSkiPassDays(SkiPassType.HOLIDAY);
+    }
+
+    @Test
+    public void testWorkdaySkiPassTrips() throws Exception {
+        mockCurrDateTime(nowMondayHalfDay);
+        testSkiPassTrips(SkiPassType.WORK_DAY);
+    }
+
+    @Test
+    public void testWorkdaySkiPassDays() throws Exception {
+        mockCurrDateTime(nowMondayHalfDay);
+        testSkiPassDays(SkiPassType.WORK_DAY);
+    }
+    
+    private void testSkiPassDays(SkiPassType type) {
+        SkiPass holidaySkiPassTwoDays = SkiPass.createSkiPass(type, expiredDateTuesday, DaysCountType.TWO_DAYS);
+        assertTrue(holidaySkiPassTwoDays.isTripAllowed());
+
+        for (int i = 0; i < 10; i++ ) {
+            holidaySkiPassTwoDays.useCardIfAllowed();
+        }
+        assertTrue(holidaySkiPassTwoDays.isTripAllowed());
+    }
+
+    private void testSkiPassTrips(SkiPassType type) {
+        SkiPass holidaySkiPassTenTripsCount = SkiPass.createSkiPass(type, expiredDateTuesday, TripsCountType.TEN);
         assertTrue(holidaySkiPassTenTripsCount.isTripAllowed());
         int tripsCount = 0;
         while (holidaySkiPassTenTripsCount.useCardIfAllowed()) {
@@ -59,20 +90,9 @@ public class SkiPassTest extends Assert {
         assertEquals(tripsCount, TripsCountType.TEN.getValue());
         assertFalse(holidaySkiPassTenTripsCount.isTripAllowed());
     }
-
-    @Test
-    public void testHolidaySkiPassDays() {
-        SkiPass holidaySkiPassTwoDays = SkiPass.createSkiPass(SkiPassType.HOLIDAY, expiredDateTuesday, DaysCountType.TWO_DAYS);
-        assertTrue(holidaySkiPassTwoDays.isTripAllowed());
-        
-        for (int i = 0; i < 10; i++ ) {
-            holidaySkiPassTwoDays.useCardIfAllowed();
-        }
-        assertTrue(holidaySkiPassTwoDays.isTripAllowed());
-    }
     
     private static void  mockCurrDateTime(LocalDateTime dateTime) throws Exception {
-        // spy was used for partial mocking
+        // spy was used for partical mocking
         PowerMockito.spy(DateTimeHelper.class);
         PowerMockito.doReturn(dateTime.toLocalDate()).when(DateTimeHelper.class, "nowDate");
         PowerMockito.doReturn(dateTime.toLocalTime()).when(DateTimeHelper.class, "nowTime");
