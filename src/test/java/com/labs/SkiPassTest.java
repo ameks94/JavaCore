@@ -14,26 +14,22 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import static com.labs.SkipassTestHelper.expiredDateTuesday;
+import static com.labs.SkipassTestHelper.nowMondayHalfDay;
+import static com.labs.SkipassTestHelper.nowSaturdayHalfDay;
+
 /**
  * Created by ameks on 03.10.2016.
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(DateTimeHelper.class)
 public class SkiPassTest extends Assert {
-    //11.10.2016
-    private static final LocalDate expiredDateTuesday = LocalDate.of(2016, 10, 11);
-    //08.10.2016 12:30
-    private static final LocalDateTime nowSaturdayHalfDay = LocalDateTime.of( 2016, 10, 8, 12, 30 );
-    //10.10.2016 12:30
-    private static final LocalDateTime nowMondayHalfDay = LocalDateTime.of( 2016, 10, 10, 12, 30 );
     
-
     @Before
     public void init() throws Exception {
         PowerMockito.mockStatic(DateTimeHelper.class);
         mockCurrDateTime(nowSaturdayHalfDay);
     }
-    
     
     @Test
     public void testSeasonSkiPass() {
