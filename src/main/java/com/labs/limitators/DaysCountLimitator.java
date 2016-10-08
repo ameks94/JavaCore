@@ -1,11 +1,11 @@
 package com.labs.limitators;
 
 import com.labs.SkiPassUsageLimitator;
+import com.labs.DateTimeHelper;
 import com.labs.types.DaysCountType;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +23,7 @@ public class DaysCountLimitator implements SkiPassUsageLimitator {
 
     @Override
     public void useSkiPass() {
-        LocalDate now = LocalDate.now();
+        LocalDate now = DateTimeHelper.nowDate();
         if (usedDays.contains(now)) {
             usedDays.add(now);
         }
@@ -31,7 +31,7 @@ public class DaysCountLimitator implements SkiPassUsageLimitator {
 
     @Override
     public boolean isTripAvailable() {
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = DateTimeHelper.nowDateTime();
         // if current time is not allowed for type
         if (!daysCountType.isAllowedTime(now.toLocalTime()))
             return false;

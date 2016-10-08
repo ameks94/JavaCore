@@ -41,7 +41,7 @@ public class SkiPass {
 
 
     public boolean isTripAllowed() {
-        return !isDateExpired() && limitator.isTripAvailable();
+        return !isDateExpired() && type.isSkiPassValidToday() && limitator.isTripAvailable();
     }
 
     public boolean useCardIfAllowed() {
@@ -76,7 +76,7 @@ public class SkiPass {
     }
 
     private boolean isDateExpired() {
-        return  LocalDate.now().isAfter(expireDate);
+        return  DateTimeHelper.nowDate().isAfter(expireDate);
     }
 
     @Override

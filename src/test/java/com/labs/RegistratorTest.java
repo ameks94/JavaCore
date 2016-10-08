@@ -16,7 +16,7 @@ public class RegistratorTest extends Assert {
     private static final List<SkiPass> skiPasses = new ArrayList<>();
     private static SkiPass existingSkiPass;
     private static SkiPass unexistingSkiPass;
-    public static final LocalDate now = LocalDate.now();
+    public static final LocalDate now = DateTimeHelper.nowDate();
 
     @BeforeClass
     public static void initialise() {
