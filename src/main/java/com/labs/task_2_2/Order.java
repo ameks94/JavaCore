@@ -49,11 +49,18 @@ public class Order {
 
     public double getValue() {
         // get total of all lineItems
-        throw new NotImplementedException();
+        return this.lineItems
+                .stream()
+                .mapToDouble( lineItem -> lineItem.getValue())
+                .sum();
     }
 
     public double getMostExpensiveItemValue() {
         // get value of the most expensive item
-        throw new NotImplementedException();
+        return this.lineItems
+                .stream()
+                .map(lineItem -> lineItem.getValue())
+                .max(Double::compareTo)
+                .get();
     }
 }

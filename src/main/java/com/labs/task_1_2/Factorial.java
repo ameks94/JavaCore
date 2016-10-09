@@ -10,7 +10,7 @@ public class Factorial {
 
     public static long factorial(long i) {
         // implement function body in order all test to complete successfully
-        return 1;
+        return LongStream.rangeClosed(2, i).reduce(1, (a, b) -> a * b);
 
     }
 }

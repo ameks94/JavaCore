@@ -38,10 +38,21 @@ public class Customer {
     }
 
     public double getTotalOrderValue() {
-        throw new NotImplementedException();
+        return this.orders
+                .stream()
+                .map( order -> order.getLineItems() )
+                .flatMap( lineItems -> lineItems.stream())
+                .mapToDouble( lineItem -> lineItem.getValue() )
+                .sum();
     }
 
     public double getMostExpensiveItemValue() {
-        throw new NotImplementedException();
+        return this.orders
+                .stream()
+                .map( order -> order.getLineItems() )
+                .flatMap( lineItems -> lineItems.stream())
+                .mapToDouble( lineItem -> lineItem.getValue() )
+                .max()
+                .getAsDouble();
     }
 }

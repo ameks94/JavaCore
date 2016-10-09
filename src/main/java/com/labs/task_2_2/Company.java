@@ -33,13 +33,11 @@ public class Company {
     }
 
     public List<Order> getOrders() {
-        assert (false);// Refactor this code to use lambdas
-
-        List<Order> orders = new ArrayList<Order>();
-        for (Customer customer : this.customers) {
-            orders.addAll(customer.getOrders());
-        }
-        return orders;
+        return this.customers
+                .stream()
+                .map(customer -> customer.getOrders())
+                .flatMap(list -> list.stream())
+                .collect(Collectors.toList());
     }
 
     public Customer getMostRecentCustomer() {
@@ -61,6 +59,10 @@ public class Company {
     }
 
     public Customer getCustomerNamed(String name) {
-        throw new NotImplementedException();
+        return customers
+                .stream()
+                .filter(customer -> customer.getName().equals(name))
+                .findFirst()
+                .get();
     }
 }

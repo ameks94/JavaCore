@@ -26,7 +26,14 @@ public class Exercise2OrdersTest extends CompanyDomain
     {
         // implement customer.getTotalOrderValue() for this exercise;
 
-        Map<String, Double> map = null;
+        Map<String, Double> map = company
+                .getCustomers()
+                .stream()
+                .collect( Collectors.groupingBy(
+                        Customer::getCity,
+                        Collectors.summingDouble(customer -> customer.getTotalOrderValue())
+                        )
+                );
 
         assertEquals(2, map.size());
         assertEquals(446.25, map.get("London"), 0.0);
@@ -41,7 +48,9 @@ public class Exercise2OrdersTest extends CompanyDomain
     @Test
     public void mostExpensiveItem()
     {
-        Map<Double, List<Customer>> map = null;
+        Map<Double, List<Customer>> map = company.getCustomers()
+                .stream()
+                .collect(Collectors.groupingBy(Customer::getMostExpensiveItemValue));
 
         Assert.assertEquals(2, map.size());
         Assert.assertEquals(2, map.entrySet().size());

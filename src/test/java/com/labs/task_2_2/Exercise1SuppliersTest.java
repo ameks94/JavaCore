@@ -21,7 +21,11 @@ public class Exercise1SuppliersTest extends CompanyDomain
     @Test
     public void findSupplierNames()
     {
-        List<String> supplierNames = null;
+        List<String> supplierNames = Arrays
+                .asList(company.getSuppliers())
+                .stream()
+                .map(supplier -> supplier.getName())
+                .collect(Collectors.toList());
 
         List<String> expectedSupplierNames = Arrays.asList(
                 "Shedtastic",
@@ -42,8 +46,11 @@ public class Exercise1SuppliersTest extends CompanyDomain
     @Test
     public void countSuppliersWithMoreThanTwoItems()
     {
-        Predicate<Supplier> moreThanTwoItems = null;
-        int suppliersWithMoreThanTwoItems = 0;
+        Predicate<Supplier> moreThanTwoItems =  supplier -> supplier.getItemNames().length > 2;
+        long suppliersWithMoreThanTwoItems = Arrays.asList(company.getSuppliers())
+                .stream()
+                .filter(moreThanTwoItems)
+                .count();
         Assert.assertEquals("suppliers with more than 2 items", 5, suppliersWithMoreThanTwoItems);
     }
 

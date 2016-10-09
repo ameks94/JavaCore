@@ -9,7 +9,11 @@ import java.util.stream.Collectors;
 public class DeveloperService {
 
     public static List<String> getLanguages(List<Developer> team) {
-        return null;
+        return team
+                .stream()
+                .map( developer -> developer.getLanguages() )
+                .flatMap(list -> list.stream())
+                .collect(Collectors.toList());
     }
 
 
