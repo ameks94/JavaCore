@@ -62,4 +62,9 @@ public class MyArrayListTest extends Assert {
     public void testGet() {
         testHelper.testGet();
     }
+
+    @Test
+    public void testIndexOfNull() {
+        testHelper.testIndexOfNull();
+    }
 }

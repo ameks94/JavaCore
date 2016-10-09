@@ -19,10 +19,11 @@ public class ListTestHelper {
         list.add(ListTestHelper.firstEl);
         list.add(ListTestHelper.secondEl);
         list.add(ListTestHelper.thirdEl);
+        list.add(null);
     }
 
     public void testArraySize() {
-        assertEquals( list.size(), 3 );
+        assertEquals( list.size(), 4 );
     }
 
     public void testArrayIndexOf() {
@@ -82,7 +83,7 @@ public class ListTestHelper {
     public void testToArray() {
         Object[] array = list.toArray();
         assertNotNull(array);
-        assertArrayEquals(array, new Object[]{ firstEl, secondEl, thirdEl });
+        assertArrayEquals(array, new Object[]{ firstEl, secondEl, thirdEl, null });
     }
 
 
@@ -96,5 +97,10 @@ public class ListTestHelper {
     public void testGet() {
         int indexToGet = 1;
         assertEquals(list.get(indexToGet), secondEl);
+    }
+
+    public void testIndexOfNull() {
+        int indexToGet = 3;
+        assertEquals(list.get(indexToGet), null);
     }
 }

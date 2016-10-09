@@ -2,7 +2,7 @@ package com.labs.implementations;
 
 import com.labs.MyList;
 
-public class MyLinkedList implements MyList {
+public class MyLinkedList<T> implements MyList<T> {
 
     //---------------------------------Private fields-----------------------------//
 
@@ -13,7 +13,7 @@ public class MyLinkedList implements MyList {
     //---------------------------------MyList api-----------------------------//
 
     @Override
-    public void add(Object o) {
+    public void add(T o) {
         final Node oldLast = last;
         final Node newNode = new Node(oldLast, o, null);
         last = newNode;
@@ -25,7 +25,7 @@ public class MyLinkedList implements MyList {
     }
 
     @Override
-    public void add(int index, Object o) {
+    public void add(int index, T o) {
         checkIndexForAdd(index);
 
         Node oldNodeAtIndex = findNode(index);
@@ -41,12 +41,12 @@ public class MyLinkedList implements MyList {
     }
 
     @Override
-    public void addAll(Object[] c) {
+    public void addAll(T[] c) {
         addAll(size, c);
     }
 
     @Override
-    public void addAll(int index, Object[] c) {
+    public void addAll(int index, T[] c) {
         checkIndexForAdd(index);
 
         Node oldNodeAtIndex;
@@ -112,14 +112,14 @@ public class MyLinkedList implements MyList {
     }
 
     @Override
-    public void set(int index, Object o) {
+    public void set(int index, T o) {
         checkIndex(index);
         Node foundNode = findNode(index);
         foundNode.value = o;
     }
 
     @Override
-    public int indexOf(Object o) {
+    public int indexOf(T o) {
         int index = 0;
         if (o == null) {
             for (Node node = first; node != null; node = node.next) {
@@ -143,7 +143,7 @@ public class MyLinkedList implements MyList {
     }
 
     @Override
-    public Object[] toArray() {
+    public T[] toArray() {
         Object[] array = new Object[size];
         Node node = first;
         int i = 0;
@@ -151,20 +151,20 @@ public class MyLinkedList implements MyList {
             array[i++] = node.value;
             node = node.next;
         }
-        return array;
+        return (T[]) array;
     }
 
     //---------------------------------Private methods and classes-----------------------------//
 
-    private static class Node
+    private static class Node<T>
     {
         /**prev == null - means that list is empty*/
         Node prev;
-        Object value;
+        T value;
         /**next == null means that it's last element*/
         Node next;
 
-        Node(Node prev, Object value, Node next)
+        Node(Node prev, T value, Node next)
         {
             this.prev = prev;
             this.value = value;

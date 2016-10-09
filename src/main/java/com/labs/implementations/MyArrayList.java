@@ -5,7 +5,7 @@ import com.labs.MyList;
 import java.util.Arrays;
 import java.util.RandomAccess;
 
-public class MyArrayList implements MyList, RandomAccess {
+public class MyArrayList<T> implements MyList<T>, RandomAccess {
 
     //---------------------------------Private fields-----------------------------//
 
@@ -18,13 +18,13 @@ public class MyArrayList implements MyList, RandomAccess {
 
     //---------------------------------MyList api-----------------------------//
     @Override
-    public void add(Object e) {
+    public void add(T e) {
         ensureCapacity(size + 1);
         entries[size++] = e;
     }
 
     @Override
-    public void add(int index, Object element) {
+    public void add(int index, T element) {
         checkIndexForAdd(index);
         ensureCapacity(size + 1);
         System.arraycopy(entries, index, entries, index + 1, size - index);
@@ -33,12 +33,12 @@ public class MyArrayList implements MyList, RandomAccess {
     }
 
     @Override
-    public void addAll(Object[] c) {
+    public void addAll(T[] c) {
         addAll(size, c);
     }
 
     @Override
-    public void addAll(int index, Object[] c) {
+    public void addAll(int index, T[] c) {
         checkIndexForAdd(index);
         int lengthToBeAdded = c.length;
         ensureCapacity(size + lengthToBeAdded);
@@ -67,13 +67,13 @@ public class MyArrayList implements MyList, RandomAccess {
     }
 
     @Override
-    public void set(int index, Object element) {
+    public void set(int index, T element) {
         checkIndex(index);
         entries[index] = element;
     }
 
     @Override
-    public int indexOf(Object o) {
+    public int indexOf(T o) {
         if (o == null) {
             for(int i = 0; i < size; i++) {
                 if ( entries[i] == null ) {
@@ -95,8 +95,8 @@ public class MyArrayList implements MyList, RandomAccess {
     }
 
     @Override
-    public Object[] toArray() {
-        return Arrays.copyOf(entries, size);
+    public T[] toArray() {
+        return (T[]) Arrays.copyOf(entries, size);
     }
 
     //---------------------------------Private methods and classes-----------------------------//
