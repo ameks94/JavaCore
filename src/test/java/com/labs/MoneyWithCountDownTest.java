@@ -10,6 +10,8 @@ import java.util.concurrent.*;
 
 import org.junit.Test;
 
+import static com.labs.TestConfigurer.*;
+import static com.labs.TestHelper.makeOperations;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -18,22 +20,12 @@ import static org.junit.Assert.assertEquals;
 public class MoneyWithCountDownTest {
     private final Bank bank = new Bank();
     private final List<Account> accountList = new ArrayList<>();
-    private final int totalAmount;
-    private final int accountNumber = 10;
-    private static final int threadCountForTest = 1_000;
-    private static final int operationCountPerThread = 100;
-    private static final int initialAmount = 1000_000;
-    private static final Random random = new Random();
 
     public MoneyWithCountDownTest(){
-        int sum = 0;
         for (int i = 0; i < accountNumber; i++) {
-            int amount = initialAmount;
-            Account account = new Account(amount);
+            Account account = new Account(initialAmount);
             accountList.add(account);
-            sum += amount;
         }
-        this.totalAmount = sum;
     }
 
 
@@ -79,12 +71,7 @@ public class MoneyWithCountDownTest {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            for (int i = 0; i < operationCountPerThread; i++) {
-                Account from = accountList.get(new Random().nextInt(accountList.size()));
-                Account to = accountList.get(new Random().nextInt(accountList.size()));
-                int amountToTransfer = random.nextInt(initialAmount);
-                bank.transfer(from, to, amountToTransfer);
-            }
+            makeOperations(operationCountPerThread, bank, accountList);
         }
     }
 }
