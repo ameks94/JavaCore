@@ -6,6 +6,11 @@ import com.labs.task1.Bank;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.*;
+
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by ameks on 23.10.2016.
@@ -14,7 +19,7 @@ public class MoneyWithCountDownTest {
     private final Bank bank = new Bank();
     private final List<Account> accountList = new ArrayList<>();
     private final int totalAmount;
-    private final int accountNumber = 2;
+    private final int accountNumber = 10;
     private final int threadCountForTest = 10_000;
     private final int initialAmount = 1000_000;
     private final Random random = new Random();
@@ -27,7 +32,7 @@ public class MoneyWithCountDownTest {
             accountList.add(account);
             sum += amount;
         }
-        totalAmount = sum;
+        this.totalAmount = sum;
     }
 
 
@@ -39,62 +44,48 @@ public class MoneyWithCountDownTest {
     }
 
 
-//    @Test
-//    public void testMoney() throws BrokenBarrierException, InterruptedException {
-//        final CountDownLatch gate = new CountDownLatch(threadCountForTest + 1);
-//        
-//        ExecutorService executorService = Executors.newFixedThreadPool(threadCountForTest, Executors.defaultThreadFactory());    
-//        
-//        for (int i = 0; i < threadCountForTest; i++) {
-//            Account from = accountList.get(new Random().nextInt(accountNumber));
-//            Account to = accountList.get(new Random().nextInt(accountNumber));
-//            Thread workerThread = new Thread(() -> {
-//                try {
-//                    gate.await();
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//                bank.transfer(from, to, initialAmount / 1000);
-//            });
-//            executorService.execute(workerThread);
-//        }
-//        
-//        gate.await();
-//
-//        executorService.shutdown();
-//        
-//        
-//    }
+    @Test
+    public void testMoney() throws BrokenBarrierException, InterruptedException {
+        final CountDownLatch gate = new CountDownLatch(1);
 
-//    private void Thread createWorkerThread(CountDownLatch gate) {
-//       
-//    }
+        ExecutorService executorService = Executors.newFixedThreadPool(threadCountForTest, Executors.defaultThreadFactory());    
 
-//    private static class WorkerThread extends Thread{
-//        private CyclicBarrier gate;
-//        private final Bank bank;
-//        private final Account from;
-//        private final Account to;
-//        private final int amount;
-//
-//
-//        public WorkerThread(CyclicBarrier gate, Bank bank, Account from, Account to, int amount) {
-//            this.bank = bank;
-//            this.from = from;
-//            this.to = to;
-//            this.amount = amount;
-//        }
-//
-//        @Override
-//        public void run() {
-//            try {
-//                gate.await();
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            } catch (BrokenBarrierException e) {
-//                e.printStackTrace();
-//            }
-//            bank.transfer(from, to, amount);
-//        }
-//    }
+        for (int i = 0; i < threadCountForTest; i++) {
+            Account from = accountList.get(new Random().nextInt(accountNumber));
+            Account to = accountList.get(new Random().nextInt(accountNumber));
+            int amountToTransfer = random.nextInt(initialAmount);
+            executorService.submit(new WorkerThread(gate, bank, from, to, amountToTransfer));
+        }
+        gate.countDown();
+        executorService.awaitTermination(5, TimeUnit.SECONDS);
+
+        assertEquals(totalAmount, countTotalAmount(accountList));
+    }
+
+    private static class WorkerThread extends Thread{
+        private CountDownLatch gate;
+        private final Bank bank;
+        private final Account from;
+        private final Account to;
+        private final int amount;
+
+
+        public WorkerThread(CountDownLatch gate, Bank bank, Account from, Account to, int amount) {
+            this.gate = gate;
+            this.bank = bank;
+            this.from = from;
+            this.to = to;
+            this.amount = amount;
+        }
+
+        @Override
+        public void run() {
+            try {
+                gate.await();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            bank.transfer(from, to, amount);
+        }
+    }
 }
