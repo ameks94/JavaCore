@@ -20,9 +20,10 @@ public class MoneyWithCountDownTest {
     private final List<Account> accountList = new ArrayList<>();
     private final int totalAmount;
     private final int accountNumber = 10;
-    private final int threadCountForTest = 10_000;
-    private final int initialAmount = 1000_000;
-    private final Random random = new Random();
+    private static final int threadCountForTest = 1_000;
+    private static final int operationCountPerThread = 100;
+    private static final int initialAmount = 1000_000;
+    private static final Random random = new Random();
 
     public MoneyWithCountDownTest(){
         int sum = 0;
@@ -51,10 +52,7 @@ public class MoneyWithCountDownTest {
         ExecutorService executorService = Executors.newFixedThreadPool(threadCountForTest, Executors.defaultThreadFactory());    
 
         for (int i = 0; i < threadCountForTest; i++) {
-            Account from = accountList.get(new Random().nextInt(accountNumber));
-            Account to = accountList.get(new Random().nextInt(accountNumber));
-            int amountToTransfer = random.nextInt(initialAmount);
-            executorService.submit(new WorkerThread(gate, bank, from, to, amountToTransfer));
+            executorService.submit(new WorkerThread(gate, bank, accountList));
         }
         gate.countDown();
         executorService.awaitTermination(5, TimeUnit.SECONDS);
@@ -64,18 +62,14 @@ public class MoneyWithCountDownTest {
 
     private static class WorkerThread extends Thread{
         private CountDownLatch gate;
-        private final Bank bank;
-        private final Account from;
-        private final Account to;
-        private final int amount;
+        private Bank bank;
+        private final List<Account> accountList;
 
 
-        public WorkerThread(CountDownLatch gate, Bank bank, Account from, Account to, int amount) {
+        public WorkerThread(CountDownLatch gate, Bank bank, List<Account> accountList) {
             this.gate = gate;
             this.bank = bank;
-            this.from = from;
-            this.to = to;
-            this.amount = amount;
+            this.accountList = accountList;
         }
 
         @Override
@@ -85,7 +79,12 @@ public class MoneyWithCountDownTest {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            bank.transfer(from, to, amount);
+            for (int i = 0; i < operationCountPerThread; i++) {
+                Account from = accountList.get(new Random().nextInt(accountList.size()));
+                Account to = accountList.get(new Random().nextInt(accountList.size()));
+                int amountToTransfer = random.nextInt(initialAmount);
+                bank.transfer(from, to, amountToTransfer);
+            }
         }
     }
 }
