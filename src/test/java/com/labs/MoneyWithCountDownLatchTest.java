@@ -17,10 +17,10 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by ameks on 23.10.2016.
  */
-public class MoneyWithCountDownTest {
+public class MoneyWithCountDownLatchTest {
     private final List<Account> accountList = new ArrayList<>();
 
-    public MoneyWithCountDownTest(){
+    public MoneyWithCountDownLatchTest(){
         for (int i = 0; i < accountNumber; i++) {
             Account account = new Account(initialAmount);
             accountList.add(account);
@@ -44,7 +44,12 @@ public class MoneyWithCountDownTest {
             executorService.submit(new WorkerThread(gate, accountList, transferMethod));
         }
         gate.countDown();
-        executorService.awaitTermination(5, TimeUnit.SECONDS);
+
+        executorService.shutdown();
+        try {
+            executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+        } catch (InterruptedException e) {
+        }
         
         assertEquals(totalAmount, countTotalAmount(accountList));
     }

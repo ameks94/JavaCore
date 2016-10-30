@@ -36,7 +36,13 @@ public class MoneyExecuterServiceOnlyTest {
     public void testMoney(TestConfigurer.TransferMethod transferMethod) throws BrokenBarrierException, InterruptedException {
         ExecutorService executorService = Executors.newFixedThreadPool(threadCountForTest, Executors.defaultThreadFactory());
         executorService.<Boolean>invokeAll(getWorkerList(transferMethod, threadCountForTest));
-        executorService.awaitTermination(5, TimeUnit.SECONDS);
+
+
+        executorService.shutdown();
+        try {
+            executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+        } catch (InterruptedException e) {
+        }
         
         assertEquals(totalAmount, countTotalAmount(accountList));
     }
