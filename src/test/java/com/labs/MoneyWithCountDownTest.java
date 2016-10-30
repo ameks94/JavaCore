@@ -18,7 +18,6 @@ import static org.junit.Assert.assertEquals;
  * Created by ameks on 23.10.2016.
  */
 public class MoneyWithCountDownTest {
-    private final Bank bank = new Bank();
     private final List<Account> accountList = new ArrayList<>();
 
     public MoneyWithCountDownTest(){
@@ -30,16 +29,23 @@ public class MoneyWithCountDownTest {
 
     @Test
     public void testMoneyTransferSynchronizeBank() throws BrokenBarrierException, InterruptedException {
+        testMoney(Bank::transferBankSynchronization);
+    }
+
+    @Test
+    public void testMoneyTransferSynchronizeAccounts() throws BrokenBarrierException, InterruptedException {
+        testMoney(Bank::transferAccountSynchronization);
+    }
+    
+    private void testMoney(TestConfigurer.TransferMethod transferMethod) throws InterruptedException {
         final CountDownLatch gate = new CountDownLatch(1);
-
-        ExecutorService executorService = Executors.newFixedThreadPool(threadCountForTest, Executors.defaultThreadFactory());    
-
+        ExecutorService executorService = Executors.newFixedThreadPool(threadCountForTest, Executors.defaultThreadFactory());
         for (int i = 0; i < threadCountForTest; i++) {
-            executorService.submit(new WorkerThread(gate, bank, accountList));
+            executorService.submit(new WorkerThread(gate, accountList, transferMethod));
         }
         gate.countDown();
         executorService.awaitTermination(5, TimeUnit.SECONDS);
-
+        
         assertEquals(totalAmount, countTotalAmount(accountList));
     }
     
@@ -52,13 +58,13 @@ public class MoneyWithCountDownTest {
 
     private static class WorkerThread extends Thread{
         private CountDownLatch gate;
-        private Bank bank;
+        private TestConfigurer.TransferMethod transferMethod;
         private final List<Account> accountList;
 
 
-        public WorkerThread(CountDownLatch gate, Bank bank, List<Account> accountList) {
+        public WorkerThread( CountDownLatch gate, List<Account> accountList, TestConfigurer.TransferMethod transferMethod) {
+            this.transferMethod = transferMethod;
             this.gate = gate;
-            this.bank = bank;
             this.accountList = accountList;
         }
 
@@ -69,7 +75,7 @@ public class MoneyWithCountDownTest {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            makeOperations(operationCountPerThread, bank, accountList);
+            makeOperations(transferMethod, operationCountPerThread, accountList);
         }
     }
 }

@@ -4,8 +4,8 @@ package com.labs.task1;
  * Created by ameks on 22.10.2016.
  */
 public class Bank {
-    public Boolean transfer(Account from, Account to,  int amount){
-        synchronized (this) {
+    public static Boolean transferBankSynchronization(Account from, Account to,  int amount){
+        synchronized (Bank.class) {
             if (from.withdraw(amount)) {
                 to.deposit(amount);
                 return Boolean.TRUE;
@@ -14,7 +14,7 @@ public class Bank {
         }
     }
     
-    public Boolean transfer2(Account from, Account to,  int amount){
+    public static Boolean transferAccountSynchronization(Account from, Account to,  int amount){
         Account firstLock, secondLock;
         if ( from.getAccountNumber() == to.getAccountNumber() )
             return false;

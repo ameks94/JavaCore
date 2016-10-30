@@ -10,7 +10,7 @@ public class Account {
     
     private final int accountNumber = generateNextAccountNumber();
     
-    private volatile int amount;
+    private int amount;
 
     public Account(int amount) {
         this.amount = amount;
@@ -20,38 +20,28 @@ public class Account {
         if (amount > this.amount)
             return false;
         this.amount -= amount;
+        try {
+            Thread.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return true;
     }
     
     public void deposit(int amount) {
         this.amount += amount;
+        try {
+            Thread.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public int getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
-        this.amount = amount;
-    }
-
     public int getAccountNumber() {
-        return accountNumber;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Account account = (Account) o;
-
-        return accountNumber == account.accountNumber;
-
-    }
-
-    @Override
-    public int hashCode() {
         return accountNumber;
     }
 

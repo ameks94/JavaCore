@@ -12,11 +12,11 @@ import static com.labs.TestConfigurer.*;
 import static com.labs.TestHelper.makeOperations;
 import static org.junit.Assert.assertEquals;
 
-public class MoneyTest {
-    private final Bank bank = new Bank();
+public class MoneyExecuterServiceOnlyTest {
+    
     private final List<Account> accountList = new ArrayList<>();
     
-    public MoneyTest(){
+    public MoneyExecuterServiceOnlyTest(){
         for (int i = 0; i < accountNumber; i++) {
             Account account = new Account(initialAmount);
             accountList.add(account);
@@ -24,12 +24,18 @@ public class MoneyTest {
     }
 
     @Test
-    public void testMoneySynchronizeBank() throws BrokenBarrierException, InterruptedException {
-        
+    public void testMoneyTransferSynchronizeBank() throws BrokenBarrierException, InterruptedException {
+        testMoney(Bank::transferBankSynchronization);
+    }
+
+    @Test
+    public void testMoneyTransferSynchronizeAccounts() throws BrokenBarrierException, InterruptedException {
+        testMoney(Bank::transferAccountSynchronization);
+    }
+
+    public void testMoney(TestConfigurer.TransferMethod transferMethod) throws BrokenBarrierException, InterruptedException {
         ExecutorService executorService = Executors.newFixedThreadPool(threadCountForTest, Executors.defaultThreadFactory());
-
-        executorService.<Boolean>invokeAll(getWorkerList(threadCountForTest));
-
+        executorService.<Boolean>invokeAll(getWorkerList(transferMethod, threadCountForTest));
         executorService.awaitTermination(5, TimeUnit.SECONDS);
         
         assertEquals(totalAmount, countTotalAmount(accountList));
@@ -42,11 +48,11 @@ public class MoneyTest {
                 .sum();
     }
     
-    private List<Callable<Boolean>> getWorkerList(int operationNumber) {
+    private List<Callable<Boolean>> getWorkerList(TestConfigurer.TransferMethod transferMethod, int operationNumber) {
         List<Callable<Boolean>> operations = new ArrayList<>();
         for (int i = 0; i < operationNumber; i++) {
             operations.add(() -> {
-                makeOperations(operationCountPerThread, bank, accountList); return null;
+                makeOperations(transferMethod, operationCountPerThread, accountList); return null;
             });
         }
         return operations;
