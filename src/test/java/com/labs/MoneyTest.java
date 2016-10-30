@@ -24,7 +24,8 @@ public class MoneyTest {
     }
 
     @Test
-    public void testMoney() throws BrokenBarrierException, InterruptedException {
+    public void testMoneySynchronizeBank() throws BrokenBarrierException, InterruptedException {
+        
         ExecutorService executorService = Executors.newFixedThreadPool(threadCountForTest, Executors.defaultThreadFactory());
 
         executorService.<Boolean>invokeAll(getWorkerList(threadCountForTest));
@@ -33,7 +34,7 @@ public class MoneyTest {
         
         assertEquals(totalAmount, countTotalAmount(accountList));
     }
-    
+
     private int countTotalAmount(List<Account> accountList) {
         return accountList
                 .stream()

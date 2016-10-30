@@ -28,17 +28,8 @@ public class MoneyWithCountDownTest {
         }
     }
 
-
-    private int countTotalAmount(List<Account> accountList) {
-        return accountList
-                .stream()
-                .mapToInt(item -> item.getAmount())
-                .sum();
-    }
-
-
     @Test
-    public void testMoney() throws BrokenBarrierException, InterruptedException {
+    public void testMoneyTransferSynchronizeBank() throws BrokenBarrierException, InterruptedException {
         final CountDownLatch gate = new CountDownLatch(1);
 
         ExecutorService executorService = Executors.newFixedThreadPool(threadCountForTest, Executors.defaultThreadFactory());    
@@ -50,6 +41,13 @@ public class MoneyWithCountDownTest {
         executorService.awaitTermination(5, TimeUnit.SECONDS);
 
         assertEquals(totalAmount, countTotalAmount(accountList));
+    }
+    
+    private int countTotalAmount(List<Account> accountList) {
+        return accountList
+                .stream()
+                .mapToInt(item -> item.getAmount())
+                .sum();
     }
 
     private static class WorkerThread extends Thread{
